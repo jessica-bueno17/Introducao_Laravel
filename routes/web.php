@@ -14,10 +14,16 @@ use App\Http\Controllers\SeriesController;
 |
 */
 
-/* Route::{verbo http}('{sua rota}', {Código a ser executado}); */
+
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/series', [SeriesController::class,'listarSeries']);
+/* Route::{verbo http}('{sua rota}', {Código a ser executado}); */
+
+Route::get('/series', [SeriesController::class,'index']);
+
+Route::get('/series/criar', [SeriesController::class,'create']);
+
+Route::post('/series/salvar', [SeriesController::class,'store']);

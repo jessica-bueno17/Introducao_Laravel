@@ -1,25 +1,37 @@
-<?php 
+<?php
 
 namespace App\Http\Controllers;
 
-class SeriesController
+use App\Models\Serie;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class SeriesController extends Controller
 {
-  public function listarSeries()
-  {
-    $series =  [
-      'Punisher',
-      'Lost',
-      'Grey\s Anatomy'
-    ];
-
-    $html = '<ul>';
-    foreach ($series as $serie){
-      $html .= "<li>$serie</li>";
+    public function index()
+    {
+        //$series =  DB::select('SELECT nome FROM series;');
+        //$series = Serie::all();
+        $series = Serie::query()->orderBy('nome')->get();
+      
+        return view('series.index')->with('series',$series);
     }
-    $html .= '</ul>';
 
-    echo $html;
+    public function create()
+    {
+        return view('series.create');
+    }
 
-  }
+    public function store(Request $request)
+    {
+        $nomeSerie = $request->input('nome');
+        $serie = new Serie();
+        $serie->nome = $nomeSerie;
+        $serie->save();
+
+        //DB::insert('INSERT INTO series (nome) VALUES (?)', [$nomeSerie]);
+        return redirect('/series');
+        
+    }
+
 }
-
