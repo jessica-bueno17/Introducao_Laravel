@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SeasonsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SeriesController;
 
@@ -17,13 +18,27 @@ use App\Http\Controllers\SeriesController;
 
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/series');
 });
 
 /* Route::{verbo http}('{sua rota}', {Código a ser executado}); */
 
-Route::get('/series', [SeriesController::class,'index']);
+Route::controller(SeriesController::class)->group(function () {
+    Route::get('/series','index')->name('series.index');
+    Route::get('/series/criar','create')->name('series.create');
+    Route::post('/series','store')->name('series.store');
+});
 
-Route::get('/series/criar', [SeriesController::class,'create']);
+Route::delete('/series/destroy/{series}',[SeriesController::class,'destroy'])
+    ->name('series.destroy');
 
-Route::post('/series/salvar', [SeriesController::class,'store']);
+Route::get('/series/{series}/edit',[SeriesController::class,'edit'])
+    ->name('series.edit');
+
+Route::put('/series/{series}',[SeriesController::class,'update'])
+    ->name('series.update');
+
+ //Route::resource('/series', SeriesController::class)
+ //->except(['show']);
+
+ Route::get('/series/{series}/seasons',[SeasonsController::class,'index'])->name('seasons.index');
